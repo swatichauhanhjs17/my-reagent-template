@@ -37,17 +37,38 @@
       [:li [:a {:href "/broken/link"} "Broken link"]]]]))
 
 
+(def my-color-atom (reagent/atom "green"))
+
+
+(defn color-input [value]
+  [:input {:type "text"
+           :value @value
+           :on-change #(reset! value (-> % .-target .-value))}])
+
+(defn change-color []
+
+    (fn []
+      [:div
+       [:p "Change the colour: " @my-color-atom]
+       [:p "Change it here: " [color-input my-color-atom]]]))
+
+
+
 (defn my-button []
+
   [:div
-   "This is my trial-button:"
- [:div {:style {:background-color "white"
-                ::stylefy/mode [[:before {:content "'CSS generated content'"}]
-                                [:hover {:background-color "#ffedcf"}]
-                                [:active {:background-color "blue" :color "white"}]]}}  [:input {:type "button" :value "Click me!"
-                                                                                                        }]] ])
+   [:span {:style {:background-color @my-color-atom}} " This is trial button "
+    [:input {:type "button" :value "Click me!"
+
+                                                                    }] ]
+
+    ] )
+
+
+
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [my-button]
+          [:h1 "Welcome to my new page"] [my-button] [change-color]
           ]))
 
 (defn items-page []
