@@ -71,9 +71,51 @@
 
 
 
+(defn red-button []
+  (let [red-color (reagent/atom nil) ]
+    (fn []
+
+      [:div
+
+       [:span {:style {:background-color @red-color}} " Click here to change the colour : "
+        [:input {:type "button" :value "RED!"
+                 :on-click #(reset!  red-color  "red")
+
+                 }] ]
+
+       ])))
+
+
+(defn orange-button []
+  (let [orange-color (reagent/atom nil) ]
+    (fn []
+
+      [:div
+
+       [:span {:style {:background-color @orange-color}} " Click here to change the colour : "
+        [:input {:type "button" :value "ORANGE!"
+                 :on-click #(reset!  orange-color  "orange")
+
+                 }] ]
+
+       ])))
+
+(defn blue-button []
+  (let [blue-color (reagent/atom nil) ]
+    (fn []
+
+      [:div
+
+       [:span {:style {:background-color @blue-color}} " Click here to change the colour : "
+        [:input {:type "button" :value "BLUE!"
+                 :on-click #(reset!  blue-color  "blue")
+
+                 }] ]
+
+       ])))
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [change-color] [my-button]
+          [:h1 "Welcome to my new page"] [change-color] [my-button]  [red-button] [orange-button] [blue-button]
           ]))
 
 (defn items-page []
