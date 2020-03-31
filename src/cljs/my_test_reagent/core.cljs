@@ -49,26 +49,31 @@
 
     (fn []
       [:div
-       [:p "Change the colour: " @my-color-atom]
-       [:p "Change it here: " [color-input my-color-atom]]]))
+       [:p "Change the colour here: " [color-input my-color-atom]
+       [:p "This is your new colour: " @my-color-atom]
+       ]]))
 
 
 
 (defn my-button []
+(let [old-color (reagent/atom "green") ]
+  (fn []
 
   [:div
-   [:span {:style {:background-color @my-color-atom}} " This is trial button "
+
+   [:span {:style {:background-color @old-color}} " Click here to change the colour : "
     [:input {:type "button" :value "Click me!"
+             :on-click #(reset!  old-color  @my-color-atom)
 
                                                                     }] ]
 
-    ] )
+    ]))  )
 
 
 
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [my-button] [change-color]
+          [:h1 "Welcome to my new page"] [change-color] [my-button]
           ]))
 
 (defn items-page []
