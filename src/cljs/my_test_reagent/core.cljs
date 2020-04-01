@@ -53,10 +53,12 @@
        [:p "This is your new colour: " @my-color-atom]
        ]]))
 
+(def old-color (reagent/atom "green"))
 
 
 (defn my-button []
-(let [old-color (reagent/atom "green") ]
+  (let [orange-color (reagent/atom nil) ]
+
   (fn []
 
   [:div
@@ -66,56 +68,47 @@
              :on-click #(reset!  old-color  @my-color-atom)
 
                                                                     }] ]
+   [:div
 
-    ]))  )
+    [:span {:style {:background-color @orange-color}} " Click here to change the colour : "
+     [:input {:type "button" :value "ORANGE!"
+              :on-click #(reset!  old-color   "orange")
+
+              }] ]
+
+    ]
+   [:div
+
+    [:span  " Click here to change the colour : "
+     [:input {:type "button" :value "BLUE!"
+              :on-click #(reset!  old-color  "blue")
+
+              }] ]
+
+    ]
+   [:div
+
+    [:span  " Click here to change the colour : "
+     [:input {:type "button" :value "RED!"
+              :on-click #(reset! old-color  "red")
+
+              }] ]
+
+    ]
+
+    ])))
 
 
 
-(defn red-button []
-  (let [red-color (reagent/atom nil) ]
-    (fn []
-
-      [:div
-
-       [:span {:style {:background-color @red-color}} " Click here to change the colour : "
-        [:input {:type "button" :value "RED!"
-                 :on-click #(reset!  red-color  "red")
-
-                 }] ]
-
-       ])))
 
 
-(defn orange-button []
-  (let [orange-color (reagent/atom nil) ]
-    (fn []
 
-      [:div
 
-       [:span {:style {:background-color @orange-color}} " Click here to change the colour : "
-        [:input {:type "button" :value "ORANGE!"
-                 :on-click #(reset!  orange-color  "orange")
 
-                 }] ]
-
-       ])))
-
-(defn blue-button []
-  (let [blue-color (reagent/atom nil) ]
-    (fn []
-
-      [:div
-
-       [:span {:style {:background-color @blue-color}} " Click here to change the colour : "
-        [:input {:type "button" :value "BLUE!"
-                 :on-click #(reset!  blue-color  "blue")
-
-                 }] ]
-
-       ])))
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [change-color] [my-button]  [red-button] [orange-button] [blue-button]
+          [:h1 "Welcome to my new page"] [change-color] [my-button]
+
           ]))
 
 (defn items-page []
