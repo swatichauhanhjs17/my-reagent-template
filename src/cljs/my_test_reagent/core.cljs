@@ -55,6 +55,16 @@
 
 (def old-color (reagent/atom "green"))
 
+(defn my-list-color [old-color]
+  [:div
+   "Color of button changed to :- " old-color
+   ]
+  )
+
+(defn my-current-color [color]
+  [:div
+   "Current Color of button changed to :- " color]
+  )
 
 (defn my-button []
   (let [orange-color (reagent/atom nil) ]
@@ -67,7 +77,7 @@
     [:input {:type "button" :value "Click me!"
              :on-click #(reset!  old-color  @my-color-atom)
 
-                                                                    }] ]
+}] ]
    [:div
 
     [:span {:style {:background-color @orange-color}} " Click here to change the colour : "
@@ -103,12 +113,30 @@
 
 
 
+(defn show-all-values
+  [old-color]
+[:ol
+ (for [item old-color]
+   ^{:key (str item)} [:li [ my-list-color old-color]]
+
+   )
+ ]
+
+  )
+
+
+
+
+
+
+
+
 
 
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [change-color] [my-button]
-
+          [:h1 "Welcome to my new page"] [change-color] [my-button] [my-current-color @old-color]
+[show-all-values @old-color]
           ]))
 
 (defn items-page []
