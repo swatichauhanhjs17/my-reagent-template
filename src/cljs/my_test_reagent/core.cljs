@@ -38,7 +38,21 @@
 
 
 (def my-color-atom (reagent/atom "green"))
+(def prev-color (reagent/atom []))
+(def old-color (reagent/atom nil))
 
+(defn show-color
+  [col]
+  (swap! prev-color conj col))
+
+(defn show-all-values
+  [prev-color]
+  [:div
+   [:ol
+    "ALL COLOURS CHANGED:-"
+    (for [item prev-color]
+      ^{:key (str item)} [:li "Colour of the button is changed to :- "  item]
+      )]])
 
 (defn color-input [value]
   [:input {:type "text"
@@ -46,97 +60,57 @@
            :on-change #(reset! value (-> % .-target .-value))}])
 
 (defn change-color []
-
     (fn []
       [:div
        [:p "Change the colour here: " [color-input my-color-atom]
        [:p "This is your new colour: " @my-color-atom]
        ]]))
 
-(def old-color (reagent/atom "green"))
-
-(defn my-list-color [old-color]
-  [:div
-   "Color of button changed to :- " old-color
-   ]
-  )
-
 (defn my-current-color [color]
   [:div
-   "Current Color of button changed to :- " color]
+    /" Current Color of button changed to :- " color]
   )
 
 (defn my-button []
-  (let [orange-color (reagent/atom nil) ]
-
   (fn []
-
   [:div
-
    [:span {:style {:background-color @old-color}} " Click here to change the colour : "
     [:input {:type "button" :value "Click me!"
-             :on-click #(reset!  old-color  @my-color-atom)
+             :on-click  #(do (reset!  old-color  @my-color-atom)
+                             (show-color @my-color-atom))}] ]
 
-}] ]
    [:div
-
-    [:span {:style {:background-color @orange-color}} " Click here to change the colour : "
+    [:span  " Click here to change the colour : "
      [:input {:type "button" :value "ORANGE!"
-              :on-click #(reset!  old-color   "orange")
-
-              }] ]
+              :on-click #(do (reset!  old-color   "blue")
+                             (show-color "orange") )}] ]
 
     ]
    [:div
-
     [:span  " Click here to change the colour : "
      [:input {:type "button" :value "BLUE!"
-              :on-click #(reset!  old-color  "blue")
+              :on-click #(do (reset!  old-color   "blue")
+                             (show-color "blue") )
+              }] ]]
 
-              }] ]
-
-    ]
    [:div
 
     [:span  " Click here to change the colour : "
      [:input {:type "button" :value "RED!"
-              :on-click #(reset! old-color  "red")
+              :on-click #(do (reset!  old-color   "red")
+                             (show-color "red") )
 
               }] ]
 
     ]
 
-    ])))
-
-
-
-
-
-
-(defn show-all-values
-  [old-color]
-[:ol
- (for [item old-color]
-   ^{:key (str item)} [:li [ my-list-color old-color]]
-
-   )
- ]
-
-  )
-
-
-
-
-
-
-
+    ]))
 
 
 
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [change-color] [my-button] [my-current-color @old-color]
-[show-all-values @old-color]
+          [:h1 "Welcome to my new page"] [change-color] [my-button] [my-current-color @old-color] [show-all-values @prev-color]
           ]))
 
 (defn items-page []
