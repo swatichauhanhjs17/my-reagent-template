@@ -68,7 +68,7 @@
 
 (defn my-current-color [color]
   [:div
-    /" Current Color of button changed to :- " color]
+    " Current Color of button changed to :- " color]
   )
 
 (defn my-button []
@@ -77,21 +77,30 @@
    [:span {:style {:background-color @old-color}} " Click here to change the colour : "
     [:input {:type "button" :value "Click me!"
              :on-click  #(do (reset!  old-color  @my-color-atom)
-                             (show-color @my-color-atom))}] ]
+                             (show-color @my-color-atom))}] ] ]))
 
+  (defn my-orange-button []
+    (fn []
    [:div
     [:span  " Click here to change the colour : "
      [:input {:type "button" :value "ORANGE!"
               :on-click #(do (reset!  old-color   "blue")
                              (show-color "orange") )}] ]
 
-    ]
+    ] ) )
+
+
+(defn my-blue-button []
+  (fn []
    [:div
     [:span  " Click here to change the colour : "
      [:input {:type "button" :value "BLUE!"
               :on-click #(do (reset!  old-color   "blue")
                              (show-color "blue") )
-              }] ]]
+              }] ]] ) )
+
+(defn my-red-button []
+  (fn []
 
    [:div
 
@@ -102,15 +111,46 @@
 
               }] ]
 
-    ]
+    ]))9
 
-    ]))
+(defn radio-button []
+  (fn []
+   [:div
+    [:p "DO YOU WANT TO SHOW THE BUTTON FOR DIFFERENT COLOURS:"]
+    [:input {:type "radio", :id "COL1", :name "COLOUR", :value "RED"}]
+    [:label {:for "red"} "RED" ]
 
 
 
+    [:br]
+    [:input {:type "radio", :id "COL2", :name "COLOUR", :value "ORANGE"}]
+    [:label {:for "orange"} "ORANGE"]
+    [:br]
+    [:input {:type "radio", :id "COL3", :name "COLOUR", :value "BLUE"}]
+    [:label {:for "blue"} "BLUE"]
+    ]) )
+
+
+(defn check-box []
+  (fn []
+    [:div
+    [:input {:type "checkbox", :id "col1", :name "red", :value "red"
+             :on-click  (my-red-button)}]
+    [:label {:for "red"} " I have a red"]
+    [:br]
+    [:input {:type "checkbox", :id "col2", :name "orange", :value "orange"}]
+    [:label {:for "orange"} " I have a orange"]
+    [:br]
+    [:input {:type "checkbox", :id "col3", :name "blue", :value "Blue"}]
+    [:label {:for "blue"} " I have a blue"]
+    [:br]
+    [:br]
+     [:input {:type "submit", :value "Submit"}]]
+
+    ))
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [change-color] [my-button] [my-current-color @old-color] [show-all-values @prev-color]
+          [:h1 "Welcome to my new page"] [change-color] [my-button] [ my-red-button] [my-orange-button] [my-current-color @old-color] [show-all-values @prev-color] [check-box] [ radio-button]
           ]))
 
 (defn items-page []
