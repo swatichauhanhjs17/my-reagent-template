@@ -40,7 +40,7 @@
 (def my-color-atom (reagent/atom "green"))
 (def prev-color (reagent/atom []))
 (def old-color (reagent/atom nil))
-
+(def my-checkbox-values (reagent/atom {:red false :orange false :blue false}))
 (defn show-color
   [col]
   (swap! prev-color conj col))
@@ -73,44 +73,73 @@
 
 (defn my-button []
   (fn []
-  [:div
-   [:span {:style {:background-color @old-color}} " Click here to change the colour : "
-    [:input {:type "button" :value "Click me!"
-             :on-click  #(do (reset!  old-color  @my-color-atom)
-                             (show-color @my-color-atom))}] ]
+    [:div
+     [:span {:style {:background-color @old-color}} " Click here to change the colour : "
+      [:input {:type "button" :value "Click me!"
+               :on-click  #(do (reset!  old-color  @my-color-atom)
+                               (show-color @my-color-atom))}] ] ]))
 
-   [:div
-    [:span  " Click here to change the colour : "
-     [:input {:type "button" :value "ORANGE!"
-              :on-click #(do (reset!  old-color   "blue")
-                             (show-color "orange") )}] ]
+(defn my-orange-button []
+  (fn []
+    [:div
+     [:span  " Click here to change the colour : "
+      [:input {:type "button" :value "ORANGE!"
+               :on-click #(do (reset!  old-color   "blue")
+                              (show-color "orange") )}] ]
 
-    ]
-   [:div
-    [:span  " Click here to change the colour : "
-     [:input {:type "button" :value "BLUE!"
-              :on-click #(do (reset!  old-color   "blue")
-                             (show-color "blue") )
-              }] ]]
+     ] ) )
 
-   [:div
 
-    [:span  " Click here to change the colour : "
-     [:input {:type "button" :value "RED!"
-              :on-click #(do (reset!  old-color   "red")
-                             (show-color "red") )
+(defn my-blue-button []
+  (fn []
+    [:div
+     [:span  " Click here to change the colour : "
+      [:input {:type "button" :value "BLUE!"
+               :on-click #(do (reset!  old-color   "blue")
+                              (show-color "blue") )
+               }] ]] ) )
 
-              }] ]
+(defn my-red-button []
+  (fn []
 
-    ]
+    [:div
 
-    ]))
+     [:span  " Click here to change the colour : "
+      [:input {:type "button" :value "RED!"
+               :on-click #(do (reset!  old-color   "red")
+                              (show-color "red") )
 
+               }] ]
+
+     ]))
+
+(defn check-box []
+  (fn []
+    [:div
+     [:input {:type "checkbox", :id "col1", :name "red", :value "red"
+              :on-click #(swap! my-checkbox-values assoc :red(-> % .-target .-checked))  }]
+     [:label {:for "red"} " I have a red"]
+     [:br]
+     [:input {:type "checkbox", :id "col2", :name "orange", :value "orange"
+              :on-click #(swap! my-checkbox-values assoc :orange(-> % .-target .-checked))}]
+     [:label {:for "orange"} " I have a orange"]
+     [:br]
+     [:input {:type "checkbox", :id "col3", :name "blue", :value "Blue"
+              :on-click #(swap! my-checkbox-values assoc :blue(-> % .-target .-checked))}]
+     [:label {:for "blue"} " I have a blue"]
+     [:br]
+     [:br]
+     [:input {:type "submit", :value "Submit"}]]
+
+    ))
+(defn show-button [my-checkbox-values]
+    (if (get @my-checkbox-values :red)
+      [my-red-button] "sorry"))
 
 
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [change-color] [my-button] [my-current-color @old-color] [show-all-values @prev-color]
+          [:h1 "Welcome to my new page"] [change-color] [my-button] [my-current-color @old-color] [show-all-values @prev-color] [check-box] [show-button @my-checkbox-values]
           ]))
 
 (defn items-page []
