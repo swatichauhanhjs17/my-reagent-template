@@ -37,6 +37,7 @@
       [:li [:a {:href "/broken/link"} "Broken link"]]]]))
 
 (def my-checkbox-values (reagent/atom {:red false :orange false :blue false}))
+(def my-radio-values (reagent/atom {:red false :orange false :blue false}))
 (def my-color-atom (reagent/atom "green"))
 (def prev-color (reagent/atom []))
 (def old-color (reagent/atom nil))
@@ -71,6 +72,10 @@
    " Current Color of button changed to :- " color]
   )
 
+(defn [color]
+  [:div
+   " Current Color of button changed to :- " color]
+  )
 (defn my-button []
   (fn []
     [:div
@@ -132,9 +137,12 @@
      [:label {:for "blue"} " I have a blue"]
      [:br]
      [:br]
-     [:input {:type "submit", :value "Submit"}]]
+     [:input {:type "submit", :value "Submit"
+              :on-click (fn [] (reset! show-message-atom true) (js/setTimeout (fn [] (reset! show-message-atom false))3000))}]]
 
     ))
+
+
 
 (defn show-buttons [my-checkbox-values]
    [:div
@@ -145,11 +153,33 @@
   )
 
 
+(defn radio-button []
+  (fn []
+    [:div
+     [:p "DO YOU WANT TO SHOW THE BUTTON FOR DIFFERENT COLOURS:"]
+     [:input {:type "radio", :id "COL1", :name "COLOUR", :value "RED"
+              :on-click #(swap! my-radio-values assoc :red(-> % .-target .-checked)) }
+      ]
+     [:label {:for "red"} "RED" ]
+     [:br]
+     [:input {:type "radio", :id "COL2", :name "COLOUR", :value "ORANGE"}]
+     [:label {:for "orange"} "ORANGE"]
+     [:br]
+     [:input {:type "radio", :id "COL3", :name "COLOUR", :value "BLUE"}]
+     [:label {:for "blue"} "BLUE"]
+     ]) )
 
+
+(defn show-radio [my-radio-values]
+  [:div
+   (if (get @my-radio-values :red) [my-red-button]  nil)
+   ]
+
+  )
 (defn my-new-page []
   (fn [] [:span.main
           [:h1 "Welcome to my new page"] [change-color] [my-button]   [my-current-color @old-color] [show-all-values @prev-color] [check-box] [show-buttons my-checkbox-values]
-
+               [radio-button] [show-radio my-radio-values]
           ]))
 
 (defn items-page []
