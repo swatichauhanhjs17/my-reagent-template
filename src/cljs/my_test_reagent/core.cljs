@@ -40,7 +40,7 @@
 (def my-color-atom (reagent/atom "green"))
 (def prev-color (reagent/atom []))
 (def old-color (reagent/atom nil))
-
+(def my-radio-values (reagent/atom {:red false :orange false :blue false}))
 (defn show-color
   [col]
   (swap! prev-color conj col))
@@ -116,32 +116,24 @@
 
 
 (defn radio-button []
-  (let [handler (fn [event]
-                  (.persist event)
-                  (js/console.log event))
-        actual-handler (fn [event]
-                         (let [new-value (assoc {:red false :orange false :blue false} (-> % .-target .-value keyword) true)]
+  (let  [ actual-handler (fn [event]
+                         (let [new-value (assoc {:red false :orange false :blue false} (-> event .-target .-value keyword) true)]
                            (reset! my-radio-values new-value) ))]
     (fn []
       [:div
        [:p "DO YOU WANT TO SHOW THE BUTTON FOR DIFFERENT COLOURS:"]
        [:input {:type "radio", :id "COL1", :name "COLOUR", :value "RED"
-                :on-click (fn [event]
-                            (.persist event)
-                            (js/console.log "red on click")
-                            (js/console.log event))
-                :on-change handler}
+                :on-change actual-handler}
         ]
        [:label {:for "red"} "RED" ]
        [:br]
        [:input {:type "radio", :id "COL2", :name "COLOUR", :value "orange"
-                :on-click actual-handler
-                :on-change handler}]
+                :on-change actual-handler
+                }]
        [:label {:for "orange"} "ORANGE"]
        [:br]
        [:input {:type "radio", :id "COL3", :name "COLOUR", :value "BLUE"
-                :on-click handler
-                :on-change handler}]
+                :on-change actual-handler }]
        [:label {:for "blue"} "BLUE"]
        ])))
 
@@ -168,25 +160,33 @@
 
     ))
 
-(defn show-buttons [my-checkbox-values]
-   [:div
-    (if (get @my-checkbox-values :red) [my-red-button]  nil)
-    (if (get @my-checkbox-values :orange) [my-orange-button]  nil)
-    (if (get @my-checkbox-values :blue) [my-blue-button]  nil)]
+(defn show-buttons [my-radio-values]
+  [:div
+   (if (get @my-radio-values :red) [my-red-button]  nil)
+   (if (get @my-radio-values :orange) [my-orange-button]  nil)
+   (if (get @my-radio-values :blue) [my-blue-button]  nil)]
+
+  )
+
+(defn show-check-buttons [my-checkbox-values-values]
+  [:div
+   (if (get @my-checkbox-values :red) [my-red-button]  nil)
+   (if (get @my-checkbox-values-values :orange) [my-orange-button]  nil)
+   (if (get @my-checkbox-values-values :blue) [my-blue-button]  nil)]
 
   )
 
 
-
 (defn my-new-page []
   (fn [] [:span.main
-          [:h1 "Welcome to my new page"] [change-color] [my-button]   [my-current-color @old-color] [show-all-values @prev-color] [check-box] [show-buttons my-checkbox-values]
-[radio-button ]
+          [:h1 "Welcome to my new page"] [change-color] [my-button]   [my-current-color @old-color] [show-all-values @prev-color] [check-box][show-check-buttons my-checkbox-values]
+          [radio-button ] [show-buttons my-radio-values]
           ]))
 
 (defn items-page []
   (fn []
     [:span.main
+
      [:h1 "The items of my-test-reagent"]
      [:ul (map (fn [item-id]
                  [:li {:name (str "item-" item-id) :key (str "item-" item-id)}
