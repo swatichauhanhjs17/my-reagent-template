@@ -118,7 +118,9 @@
 (defn radio-button []
   (let  [ actual-handler (fn [event]
                          (let [new-value (assoc {:red false :orange false :blue false} (-> event .-target .-value keyword) true)]
-                           (reset! my-radio-values new-value) ))]
+                           (reset! my-radio-values new-value)
+                           )
+                           )]
     (fn []
       [:div
        [:p "DO YOU WANT TO SHOW THE BUTTON FOR DIFFERENT COLOURS:"]
@@ -162,15 +164,15 @@
 
 (defn show-buttons [my-radio-values]
   [:div
-   (if (get @my-radio-values :red) [my-red-button]  nil)
-   (if (get @my-radio-values :orange) [my-orange-button]  nil)
-   (if (get @my-radio-values :blue) [my-blue-button]  nil)]
+   (if (get @my-radio-values :red) [my-red-button]  "red")
+   (if (get @my-radio-values :orange) [my-orange-button]  "orange")
+   (if (get @my-radio-values :blue) [my-blue-button]  "blue")]
 
   )
 
 (defn show-check-buttons [my-checkbox-values-values]
   [:div
-   (if (get @my-checkbox-values :red) [my-red-button]  nil)
+   (if (get @my-checkbox-values :red) [my-red-button] )
    (if (get @my-checkbox-values-values :orange) [my-orange-button]  nil)
    (if (get @my-checkbox-values-values :blue) [my-blue-button]  nil)]
 
